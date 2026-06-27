@@ -173,11 +173,11 @@
         .parallax-bg { transition: background-position 0.1s linear; }
 
         /* Galería con aparición escalonada e hover */
-        .gallery-img { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .gallery-img { opacity: 0; transform: translateY(35px) scale(0.96); transition: opacity 0.9s ease-out, transform 0.9s ease-out; }
         .reveal.active .gallery-img { opacity: 1; transform: translateY(0) scale(1); }
-        .reveal.active .gallery-img:nth-child(1) { transition-delay: 0.1s; }
-        .reveal.active .gallery-img:nth-child(2) { transition-delay: 0.3s; }
-        .reveal.active .gallery-img:nth-child(3) { transition-delay: 0.5s; }
+        .reveal.active .gallery-img:nth-child(1) { transition-delay: 0.2s; }
+        .reveal.active .gallery-img:nth-child(2) { transition-delay: 0.55s; }
+        .reveal.active .gallery-img:nth-child(3) { transition-delay: 0.9s; }
         .gallery-img img { transition: transform 0.4s ease; }
         .gallery-img:hover img { transform: scale(1.04); }
 
@@ -232,7 +232,7 @@
         <section class="snap-section w-full flex flex-col justify-center items-center text-center bg-cover bg-center reveal"
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(4).jpg');">
             <div class="z-10 p-6 flex flex-col items-center text-[#4377A3] drop-shadow-lg">
-                <h3 class="reveal-child font-great-vibes text-4xl mb-4">Nuestra canción</h3>
+                <h3 class="reveal-child font-great-vibes text-4xl mb-4">Nuestra<br>Canción</h3>
 
                 <div class="audio-player-wrapper reveal-child delay-1">
                     <div class="w-full flex justify-end mb-2 text-[#B89C23]"><span class="heart-beat">♥</span></div>
@@ -248,7 +248,10 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
                         </div>
                         <div class="main-btn" onclick="togglePlay()">
-                            <span id="playIcon" style="color: #B89C23; font-size: 20px;">⏸</span>
+                            <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24" fill="#B89C23">
+                                <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+                                <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+                            </svg>
                         </div>
                         <div class="ctrl-btn" onclick="goToEnd()" title="Ir al final">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
@@ -262,7 +265,7 @@
                     </audio>
                 </div>
 
-                <p class="reveal-child delay-2 font-montserrat italic text-[0.81em] md:text-[1.62em] max-w-lg mb-8 mt-6 text-center font-bold">
+                <p class="reveal-child delay-2 font-montserrat italic text-[0.8505em] md:text-[1.701em] max-w-lg mb-8 mt-6 text-center font-bold">
                     "Sabes que estás enamorado cuando no quieres acostarte porque la realidad es por fin mejor que tus sueños"
                 </p>
                 <div class="reveal-child delay-3 flex items-center gap-4 text-[#B89C23] mt-4 font-great-vibes text-5xl">
@@ -270,7 +273,7 @@
                     <span class="date-number">10</span><span class="date-divider w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
                     <span class="date-number">26</span>
                 </div>
-                <p class="reveal-child delay-4 font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos para celebrar juntos</p>
+                <p class="reveal-child delay-4 font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos<br>para celebrar<br>juntos</p>
             </div>
         </section>
 
@@ -305,11 +308,11 @@
 
         <!-- 5. Galería -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-gray-50 p-4 reveal">
-            <h2 class="reveal-child font-great-vibes text-4xl mb-6 text-[#4377A3]">Nuestros momentos</h2>
-            <div class="flex flex-col gap-4 w-full max-w-sm">
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-64 object-cover"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-64 object-cover"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-64 object-cover"></div>
+            <h2 class="reveal-child font-great-vibes text-4xl mb-4 text-[#4377A3]">Nuestros momentos</h2>
+            <div class="flex flex-col gap-3 w-full max-w-sm h-[78vh] md:h-[70vh]">
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-full object-cover"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-full object-cover"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-full object-cover"></div>
             </div>
         </section>
 
@@ -367,6 +370,12 @@
         const coverSection = document.getElementById('coverSection');
         const toast = document.getElementById('toast');
 
+        const PAUSE_ICON = '<rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect>';
+        const PLAY_ICON = '<polygon points="6,4 20,12 6,20"></polygon>';
+        function setPlayIcon(playing) {
+            playIcon.innerHTML = playing ? PAUSE_ICON : PLAY_ICON;
+        }
+
         function showToast(msg) {
             toast.textContent = msg;
             toast.classList.add('show');
@@ -394,11 +403,11 @@
                     if (playPromise !== undefined) {
                         playPromise.catch(() => {
                             // Autoplay bloqueado: el usuario podrá darle play manualmente
-                            playIcon.innerText = "▶";
+                            setPlayIcon(false);
                         });
                     }
                 } catch (e) {
-                    playIcon.innerText = "▶";
+                    setPlayIcon(false);
                 }
             }, 850);
         }
@@ -406,10 +415,10 @@
         function togglePlay() {
             if (audio.paused) {
                 audio.play().catch(() => {});
-                playIcon.innerText = "⏸";
+                setPlayIcon(true);
             } else {
                 audio.pause();
-                playIcon.innerText = "▶";
+                setPlayIcon(false);
             }
         }
 
