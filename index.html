@@ -5,30 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Boda - Jesús y Karla</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         .font-great-vibes { font-family: 'Great Vibes', cursive; }
         .font-montserrat { font-family: 'Montserrat', sans-serif; }
         .snap-container { scroll-snap-type: y mandatory; overflow-y: scroll; height: 100vh; scroll-behavior: smooth; }
         .snap-section { scroll-snap-align: start; height: 100vh; position: relative; overflow: hidden; }
-        
-        /* Animaciones */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
+
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+        }
+
+        /* Animaciones de aparición al hacer scroll */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease-out, transform 1s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        
+
+        .reveal-child { opacity: 0; transform: translateY(18px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.active .reveal-child { opacity: 1; transform: translateY(0); }
+        .reveal.active .delay-1 { transition-delay: 0.15s; }
+        .reveal.active .delay-2 { transition-delay: 0.3s; }
+        .reveal.active .delay-3 { transition-delay: 0.45s; }
+        .reveal.active .delay-4 { transition-delay: 0.6s; }
+        .reveal.active .delay-5 { transition-delay: 0.75s; }
+
         /* Sobre / Pantalla de inicio */
-        .overlay { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f1f5f9; transition: opacity 0.5s; }
-        .envelope { width: 300px; height: 200px; background: white; border: 1px solid #e2e8f0; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; }
-        .seal { width: 80px; height: 80px; background: #B89C23; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Great Vibes', cursive; font-size: 24px; cursor: pointer; border: 4px solid white; box-shadow: 0 0 10px rgba(184, 156, 35, 0.5); transition: 0.3s; }
-        .seal:hover { transform: scale(1.05); }
+        .overlay { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #f1f5f9; transition: opacity 0.6s ease; }
+        .overlay.closing { opacity: 0; pointer-events: none; }
+        .envelope { width: 300px; height: 200px; background: white; border: 1px solid #e2e8f0; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px; animation: envelopeFloat 3s ease-in-out infinite; }
+        @keyframes envelopeFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        .seal { width: 80px; height: 80px; background: #B89C23; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Great Vibes', cursive; font-size: 24px; cursor: pointer; border: 4px solid white; box-shadow: 0 0 10px rgba(184, 156, 35, 0.5); transition: transform 0.3s ease, box-shadow 0.3s ease; animation: sealPulse 2.2s ease-in-out infinite; }
+        .seal:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(184, 156, 35, 0.7); }
+        .seal:active { transform: scale(0.96); }
+        @keyframes sealPulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(184, 156, 35, 0.5); }
+          50% { box-shadow: 0 0 22px rgba(184, 156, 35, 0.8); }
+        }
+        .hint-text { animation: hintFade 1.8s ease-in-out infinite; }
+        @keyframes hintFade {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
+
+        /* Portada: entrada escalonada al abrir */
+        .cover-title, .cover-names {
+          opacity: 0; transform: translateY(20px);
+          transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .cover-revealed .cover-title { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+        .cover-revealed .cover-names { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
 
         /* Reproductor minimalista dorado */
         .audio-player-wrapper { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 300px; color: #B89C23; }
         .progress-container { width: 100%; height: 2px; background: rgba(184, 156, 35, 0.3); position: relative; cursor: pointer; }
         .progress-bar { height: 100%; background: #B89C23; width: 0%; transition: width 0.1s; }
-        .progress-handle { width: 10px; height: 10px; background: #B89C23; border-radius: 50%; position: absolute; top: -4px; left: 0%; }
+        .progress-handle { width: 10px; height: 10px; background: #B89C23; border-radius: 50%; position: absolute; top: -4px; left: 0%; transition: left 0.1s; }
         .controls { display: flex; align-items: center; gap: 20px; font-size: 20px; margin-top: 10px; color: #B89C23; }
-        .main-btn { width: 50px; height: 50px; border: 2px solid #B89C23; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #B89C23; }
+        .ctrl-btn { cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; display: flex; }
+        .ctrl-btn:hover { transform: scale(1.15); }
+        .ctrl-btn:active { transform: scale(0.9); }
+        .main-btn { width: 50px; height: 50px; border: 2px solid #B89C23; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #B89C23; transition: transform 0.2s ease, background-color 0.2s ease; }
+        .main-btn:hover { transform: scale(1.08); background-color: rgba(184, 156, 35, 0.08); }
+        .main-btn:active { transform: scale(0.94); }
+
+        .heart-beat { animation: heartBeat 1.6s ease-in-out infinite; display: inline-block; }
+        @keyframes heartBeat {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.25); }
+        }
+
+        /* Botón CTA con micro-interacción */
+        .cta-btn { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(184, 156, 35, 0.4); }
+        .cta-btn:active { transform: translateY(0); }
+
+        /* Galería con aparición escalonada e hover */
+        .gallery-img { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.active .gallery-img { opacity: 1; transform: translateY(0) scale(1); }
+        .reveal.active .gallery-img:nth-child(1) { transition-delay: 0.1s; }
+        .reveal.active .gallery-img:nth-child(2) { transition-delay: 0.3s; }
+        .reveal.active .gallery-img:nth-child(3) { transition-delay: 0.5s; }
+        .gallery-img img { transition: transform 0.4s ease; }
+        .gallery-img:hover img { transform: scale(1.04); }
+
+        /* Inputs del formulario con foco animado */
+        .rsvp-input { transition: border-color 0.25s ease, box-shadow 0.25s ease; }
+        .rsvp-input:focus { outline: none; border-color: #B89C23; box-shadow: 0 0 0 3px rgba(184, 156, 35, 0.18); }
+
+        /* Línea de fechas con pequeño pulso */
+        .date-divider { animation: dividerGlow 2.5s ease-in-out infinite; }
+        @keyframes dividerGlow {
+          0%, 100% { opacity: 0.5; }
+          50% { opacity: 1; }
+        }
+
+        /* Cierre: corazón flotante */
+        .closing-heart { animation: floatUp 3s ease-in-out infinite; display: inline-block; }
+        @keyframes floatUp {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        /* Toast de confirmación */
+        .toast {
+          position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+          background: #4377A3; color: white; padding: 12px 22px; border-radius: 999px;
+          font-family: 'Montserrat', sans-serif; font-size: 14px; opacity: 0; z-index: 60;
+          transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -38,16 +126,18 @@
         <div class="envelope">
             <div class="seal" onclick="abrirInvitacion()">J & K</div>
         </div>
-        <p class="mt-8 text-[#B89C23] font-montserrat font-bold">Haz clic en el sello para abrir</p>
+        <p class="mt-8 text-[#B89C23] font-montserrat font-bold hint-text">Haz clic en el sello para abrir</p>
     </div>
+
+    <div id="toast" class="toast"></div>
 
     <div class="snap-container">
         <!-- 1. Portada -->
-        <section class="snap-section w-full flex flex-col justify-start pt-[5vh] items-center text-center bg-cover bg-center reveal" 
+        <section id="coverSection" class="snap-section w-full flex flex-col justify-start pt-[5vh] items-center text-center bg-cover bg-center"
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(3).jpg');">
             <div class="z-10 mt-[5vh]">
-                <h1 class="font-montserrat text-sm tracking-[0.475em] uppercase text-gray-900 mb-6">Nuestra Boda</h1>
-                <h2 class="font-great-vibes text-6xl md:text-8xl text-blue-600 leading-none">Jesús &<br>Karla</h2>
+                <h1 class="cover-title font-montserrat text-sm tracking-[0.475em] uppercase text-gray-900 mb-6">Nuestra Boda</h1>
+                <h2 class="cover-names font-great-vibes text-6xl md:text-8xl text-blue-600 leading-none">Jesús &<br>Karla</h2>
             </div>
         </section>
 
@@ -55,48 +145,56 @@
         <section class="snap-section w-full flex flex-col justify-center items-center text-center bg-cover bg-center reveal"
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(4).jpg');">
             <div class="z-10 p-6 flex flex-col items-center text-[#4377A3] drop-shadow-lg">
-                <h3 class="font-great-vibes text-4xl mb-4">Nuestra canción</h3>
-                
-                <div class="audio-player-wrapper">
-                    <div class="w-full flex justify-end mb-2 text-[#B89C23]"><span>♥</span></div>
+                <h3 class="reveal-child font-great-vibes text-4xl mb-4">Nuestra canción</h3>
+
+                <div class="audio-player-wrapper reveal-child delay-1">
+                    <div class="w-full flex justify-end mb-2 text-[#B89C23]"><span class="heart-beat">♥</span></div>
                     <div class="progress-container" onclick="seek(event)">
                         <div id="progress" class="progress-bar"></div>
                         <div id="handle" class="progress-handle"></div>
                     </div>
                     <div class="controls">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M16 17.01V13h-4v2l-5-3 5-3v2h4V6.99L21 12l-5 5.01zM7 11H5v2h2v-2zM7 7H5v2h2V7z"/></svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                        <div class="ctrl-btn" onclick="skip(-10)" title="Retroceder 10s">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M16 17.01V13h-4v2l-5-3 5-3v2h4V6.99L21 12l-5 5.01zM7 11H5v2h2v-2zM7 7H5v2h2V7z"/></svg>
+                        </div>
+                        <div class="ctrl-btn" onclick="restart()" title="Reiniciar">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                        </div>
                         <div class="main-btn" onclick="togglePlay()">
                             <span id="playIcon" style="color: #B89C23; font-size: 20px;">⏸</span>
                         </div>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                        <div class="ctrl-btn" onclick="goToEnd()" title="Ir al final">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                        </div>
+                        <div class="ctrl-btn" onclick="skip(10)" title="Adelantar 10s">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#B89C23"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                        </div>
                     </div>
-                    <audio id="music" ontimeupdate="updateProgress()">
+                    <audio id="music" ontimeupdate="updateProgress()" preload="auto">
                         <source src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/Kany%20Garc%C3%ADa%20-%20Mi%20Plan%20de%20Vida%20(con%20Abel%20Pintos%20-%20Official%20Video).mp3" type="audio/mpeg">
                     </audio>
                 </div>
 
-                <p class="font-montserrat italic text-[0.81em] md:text-[1.62em] max-w-lg mb-8 mt-6 text-center font-bold">
+                <p class="reveal-child delay-2 font-montserrat italic text-[0.81em] md:text-[1.62em] max-w-lg mb-8 mt-6 text-center font-bold">
                     "Sabes que estás enamorado cuando no quieres acostarte porque la realidad es por fin mejor que tus sueños"
                 </p>
-                <div class="flex items-center gap-4 text-[#B89C23] mt-4 font-great-vibes text-5xl">
-                    <span>15</span><span class="w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
-                    <span>10</span><span class="w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
+                <div class="reveal-child delay-3 flex items-center gap-4 text-[#B89C23] mt-4 font-great-vibes text-5xl">
+                    <span>15</span><span class="date-divider w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
+                    <span>10</span><span class="date-divider w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
                     <span>26</span>
                 </div>
-                <p class="font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos para celebrar juntos</p>
+                <p class="reveal-child delay-4 font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos para celebrar juntos</p>
             </div>
         </section>
 
         <!-- 3. Papás -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-[#E0F2FE] py-4 px-4 reveal">
-            <h2 class="font-great-vibes text-4xl mb-2 text-[#4377A3] text-center leading-tight">Nuestros<br>Papás</h2>
-            <div class="font-montserrat text-center space-y-0.5 text-2xl text-[#4377A3]">
+            <h2 class="reveal-child font-great-vibes text-4xl mb-2 text-[#4377A3] text-center leading-tight">Nuestros<br>Papás</h2>
+            <div class="reveal-child delay-1 font-montserrat text-center space-y-0.5 text-2xl text-[#4377A3]">
                 <p>Jesús Salas Orozco</p>
                 <p>&</p>
                 <p>Dalila Orozco Ochoa</p>
-                <div class="py-2 flex items-center justify-center"><span class="w-8 h-px bg-[#4377A3]"></span><span class="px-2">♥</span><span class="w-8 h-px bg-[#4377A3]"></span></div>
+                <div class="py-2 flex items-center justify-center"><span class="w-8 h-px bg-[#4377A3]"></span><span class="px-2 heart-beat">♥</span><span class="w-8 h-px bg-[#4377A3]"></span></div>
                 <p>María Arcelia Palacios</p>
                 <p>&</p>
                 <p>Mauro César Torrero Ramos</p>
@@ -108,29 +206,33 @@
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(8).jpg');">
             <div class="absolute inset-0 bg-white/70"></div>
             <div class="relative z-10 flex flex-col items-center">
-                <h2 class="font-great-vibes text-4xl mb-6 text-[#4377A3]">Recepción</h2>
-                <div class="font-montserrat text-[#4377A3] text-lg space-y-2 mb-8">
+                <h2 class="reveal-child font-great-vibes text-4xl mb-6 text-[#4377A3]">Recepción</h2>
+                <div class="reveal-child delay-1 font-montserrat text-[#4377A3] text-lg space-y-2 mb-8">
                     <p class="font-bold text-xl">SALÓN JARDÍN GRAND OASIS</p>
                     <p>2:30 PM</p>
                 </div>
-                <img src="https://raw.githubusercontent.com/regina1503/Mis-xv-a-os-Monserrat-Sarai/main/image-removebg-preview%20(1).png" alt="Salón" class="w-64 h-auto mb-6 object-contain">
-                <a href="#" class="px-8 py-4 bg-[#B89C23] text-white font-montserrat rounded-full shadow-lg">Ver ubicación</a>
+                <img src="https://raw.githubusercontent.com/regina1503/Mis-xv-a-os-Monserrat-Sarai/main/image-removebg-preview%20(1).png" alt="Salón" class="reveal-child delay-2 w-64 h-auto mb-6 object-contain">
+                <a href="#" class="reveal-child delay-3 cta-btn px-8 py-4 bg-[#B89C23] text-white font-montserrat rounded-full shadow-lg">Ver ubicación</a>
             </div>
         </section>
 
         <!-- 5. Galería -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-gray-50 p-4 reveal">
-            <h2 class="font-great-vibes text-4xl mb-6 text-[#4377A3]">Nuestros momentos</h2>
+            <h2 class="reveal-child font-great-vibes text-4xl mb-6 text-[#4377A3]">Nuestros momentos</h2>
             <div class="flex flex-col gap-4 w-full max-w-sm">
-                <img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-64 object-cover rounded-lg shadow-md">
-                <img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-64 object-cover rounded-lg shadow-md">
-                <img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-64 object-cover rounded-lg shadow-md">
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-64 object-cover"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-64 object-cover"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-64 object-cover"></div>
             </div>
         </section>
 
         <!-- 6. Frase Especial -->
         <section class="snap-section w-full flex flex-col justify-center items-center text-center bg-cover bg-center p-6 reveal"
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(7).jpg');">
+            <div class="absolute inset-0 bg-black/20"></div>
+            <p class="reveal-child relative z-10 font-great-vibes text-4xl md:text-5xl text-white max-w-lg drop-shadow-lg">
+                Hoy unimos dos historias para escribir una sola
+            </p>
         </section>
 
         <!-- 7. Dress Code -->
@@ -138,9 +240,9 @@
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(8).jpg');">
             <div class="absolute inset-0 bg-white/50"></div>
             <div class="relative z-10">
-                <h2 class="font-great-vibes text-[3.06rem] mb-6 text-[#4377A3]">Dress Code</h2>
-                <p class="font-montserrat text-xl text-[#4377A3] mb-4">Formal elegante</p>
-                <p class="font-montserrat text-[0.7225rem] text-[#4377A3] max-w-md italic mb-6">
+                <h2 class="reveal-child font-great-vibes text-[3.06rem] mb-6 text-[#4377A3]">Dress Code</h2>
+                <p class="reveal-child delay-1 font-montserrat text-xl text-[#4377A3] mb-4">Formal elegante</p>
+                <p class="reveal-child delay-2 font-montserrat text-[0.7225rem] text-[#4377A3] max-w-md italic mb-6">
                     Les pedimos evitar el uso de colores azul cielo y azul rey.
                     <img src="https://github.com/regina1503/Mis-xv-a-os-Monserrat-Sarai/blob/main/87bd010aec6ebecaa9aef69642229a6b-Photoroom.png?raw=true" class="w-48 h-auto mx-auto mt-4" alt="Icono Vestimenta">
                 </p>
@@ -149,26 +251,26 @@
 
         <!-- 8. Asistencia -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-cover bg-center p-6 text-center reveal"
-                 style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(9.jpg');">
+                 style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(9).jpg');">
             <div class="absolute inset-0 bg-white/70"></div>
             <div class="relative z-10 w-full max-w-sm flex flex-col items-center -mt-[20vh]">
-                <h2 class="font-great-vibes text-4xl mb-8 text-[#4377A3] text-center">Confirmar<br>Asistencia</h2>
-                <form id="rsvpForm" class="w-full space-y-4">
-                    <input type="text" id="nombre" placeholder="Nombre completo" minlength="8" required class="w-full p-3 border rounded-lg">
-                    <select id="asistencia" class="w-full p-3 border rounded-lg">
-                        <option value="Si, asistiré">Sí, asistiré</option>
+                <h2 class="reveal-child font-great-vibes text-4xl mb-8 text-[#4377A3] text-center">Confirmar<br>Asistencia</h2>
+                <form id="rsvpForm" class="reveal-child delay-1 w-full space-y-4">
+                    <input type="text" id="nombre" placeholder="Nombre completo" minlength="8" required class="rsvp-input w-full p-3 border rounded-lg">
+                    <select id="asistencia" class="rsvp-input w-full p-3 border rounded-lg">
+                        <option value="Sí, asistiré">Sí, asistiré</option>
                         <option value="No podré asistir">No podré asistir</option>
                     </select>
-                    <button type="button" onclick="enviarWhatsApp()" class="w-full py-4 bg-[#B89C23] text-white rounded-lg font-bold hover:bg-[#a08a20]">Enviar a WhatsApp</button>
+                    <button type="button" onclick="enviarWhatsApp()" class="cta-btn w-full py-4 bg-[#B89C23] text-white rounded-lg font-bold hover:bg-[#a08a20]">Enviar a WhatsApp</button>
                 </form>
             </div>
         </section>
 
         <!-- 9. Cierre -->
-        <section class="snap-section w-full flex flex-col justify-start items-center p-6 text-center bg-cover bg-center reveal" 
+        <section class="snap-section w-full flex flex-col justify-start items-center p-6 text-center bg-cover bg-center reveal"
                  style="background-image: url('https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/Jesus%20y%20Karla%20(10).jpg');">
             <div class="relative z-10 flex flex-col items-center mt-[15vh]">
-                <h2 class="font-great-vibes text-6xl text-[#B89C23] drop-shadow-md">¡Te esperamos!</h2>
+                <h2 class="reveal-child font-great-vibes text-6xl text-[#B89C23] drop-shadow-md">¡Te esperamos! <span class="closing-heart">♥</span></h2>
             </div>
         </section>
     </div>
@@ -178,37 +280,88 @@
         const progress = document.getElementById('progress');
         const handle = document.getElementById('handle');
         const playIcon = document.getElementById('playIcon');
+        const overlay = document.getElementById('overlay');
+        const coverSection = document.getElementById('coverSection');
+        const toast = document.getElementById('toast');
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2600);
+        }
 
         function abrirInvitacion() {
-            document.getElementById('overlay').style.display = 'none';
-            audio.currentTime = 5;
-            audio.play();
+            overlay.classList.add('closing');
+            setTimeout(() => { overlay.style.display = 'none'; }, 600);
+
+            // Disparar la animación de entrada de la portada
+            coverSection.classList.add('cover-revealed');
+
+            // Intentar reproducir el audio; si el navegador lo bloquea, no rompemos nada
+            try {
+                audio.currentTime = 5;
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        // Autoplay bloqueado: el usuario podrá darle play manualmente
+                        playIcon.innerText = "▶";
+                    });
+                }
+            } catch (e) {
+                playIcon.innerText = "▶";
+            }
         }
 
         function togglePlay() {
-            if (audio.paused) { audio.play(); playIcon.innerText = "⏸"; }
-            else { audio.pause(); playIcon.innerText = "▶"; }
+            if (audio.paused) {
+                audio.play().catch(() => {});
+                playIcon.innerText = "⏸";
+            } else {
+                audio.pause();
+                playIcon.innerText = "▶";
+            }
         }
 
         function updateProgress() {
+            if (!isFinite(audio.duration) || audio.duration === 0) return;
             const percent = (audio.currentTime / audio.duration) * 100;
             progress.style.width = percent + "%";
             handle.style.left = percent + "%";
         }
 
         function seek(e) {
+            if (!isFinite(audio.duration) || audio.duration === 0) return;
             const container = e.target.closest('.progress-container');
-            const clickPosition = e.offsetX;
+            const rect = container.getBoundingClientRect();
+            const clickPosition = e.clientX - rect.left;
             const containerWidth = container.offsetWidth;
-            audio.currentTime = (clickPosition / containerWidth) * audio.duration;
+            const ratio = Math.min(Math.max(clickPosition / containerWidth, 0), 1);
+            audio.currentTime = ratio * audio.duration;
+        }
+
+        function skip(seconds) {
+            if (!isFinite(audio.duration)) return;
+            audio.currentTime = Math.min(Math.max(audio.currentTime + seconds, 0), audio.duration);
+        }
+
+        function restart() {
+            audio.currentTime = 0;
+        }
+
+        function goToEnd() {
+            if (!isFinite(audio.duration)) return;
+            audio.currentTime = Math.max(audio.duration - 1, 0);
         }
 
         function enviarWhatsApp() {
-            const nombre = document.getElementById('nombre').value;
+            const nombre = document.getElementById('nombre').value.trim();
             const asistencia = document.getElementById('asistencia').value;
-            if(nombre.length < 8) { alert("Por favor ingresa tu nombre completo (mínimo 8 letras)"); return; }
+            if (nombre.length < 8) {
+                showToast("Por favor ingresa tu nombre completo");
+                return;
+            }
             const mensaje = `Hola, mi nombre es ${nombre}. Confirmo: ${asistencia} a la boda de Jesús y Karla.`;
-            window.open(`https://wa.me/5216641234567?text=${encodeURIComponent(mensaje)}`);
+            window.open(`https://wa.me/526642047860?text=${encodeURIComponent(mensaje)}`);
         }
 
         const observer = new IntersectionObserver((entries) => {
@@ -217,7 +370,7 @@
                     entry.target.classList.add('active');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.15 });
 
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     </script>
