@@ -215,9 +215,9 @@
         /* Galería con aparición escalonada e hover */
         .gallery-img { opacity: 0; transform: translateY(35px) scale(0.96); transition: opacity 0.9s ease-out, transform 0.9s ease-out; }
         .reveal.active .gallery-img { opacity: 1; transform: translateY(0) scale(1); }
-        .reveal.active .gallery-img:nth-child(1) { transition-delay: 0.2s; }
-        .reveal.active .gallery-img:nth-child(2) { transition-delay: 0.55s; }
-        .reveal.active .gallery-img:nth-child(3) { transition-delay: 0.9s; }
+        .reveal.active .gallery-row > .gallery-img:nth-child(1) { transition-delay: 0.55s; }
+        .reveal.active .gallery-row > .gallery-img:nth-child(2) { transition-delay: 0.9s; }
+        .reveal.active > div > .gallery-img:first-child { transition-delay: 0.2s; }
         .gallery-img img { transition: transform 0.4s ease; }
         .gallery-img:hover img { transform: scale(1.04); }
 
@@ -266,7 +266,7 @@
         <!-- 1. Portada -->
         <section id="coverSection" class="snap-section w-full flex flex-col justify-start pt-[5vh] items-center text-center bg-cover bg-center"
                  style="background-image: url('https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/Jesus%20y%20Karla%20(3).jpg');">
-            <div class="z-10 mt-[5vh]">
+            <div class="z-10 mt-[7vh]">
                 <h1 class="cover-title font-montserrat text-sm tracking-[0.475em] uppercase text-gray-900 mb-6">Nuestra Boda</h1>
                 <h2 class="cover-names font-great-vibes text-6xl md:text-8xl text-blue-600 leading-none">Jesús &<br>Karla</h2>
             </div>
@@ -353,10 +353,12 @@
         <!-- 5. Galería -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-gray-50 p-4 reveal">
             <h2 class="reveal-child font-great-vibes text-4xl mb-4 text-[#4377A3] -mt-[5vh]">Nuestros momentos</h2>
-            <div class="flex flex-col gap-3 w-full max-w-sm h-[76vh] md:h-[68vh]">
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-full object-contain"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-full object-contain"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-full object-contain"></div>
+            <div class="flex flex-col gap-3 w-full max-w-sm h-[74vh] md:h-[66vh]">
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-[1.1] min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-full object-cover"></div>
+                <div class="flex gap-3 flex-[1.4] min-h-0 gallery-row">
+                    <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-full object-cover"></div>
+                    <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-full object-cover"></div>
+                </div>
             </div>
         </section>
 
