@@ -37,82 +37,122 @@
         }
         .overlay.closing { opacity: 0; pointer-events: none; }
 
-        .envelope-wrapper { perspective: 1200px; animation: envelopeFloat 4s ease-in-out infinite; }
+        .envelope-wrapper { perspective: 1400px; animation: envelopeFloat 4.5s ease-in-out infinite; }
         @keyframes envelopeFloat {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-9px); }
         }
 
         .envelope {
-          width: 300px; height: 190px; position: relative;
-          background: linear-gradient(165deg, #fffdf8 0%, #f7f0e3 100%);
-          border: 1px solid #d9c9a3;
-          box-shadow: 0 20px 45px rgba(120, 96, 30, 0.18), 0 2px 6px rgba(0,0,0,0.05);
-          border-radius: 3px;
+          width: 310px; height: 200px; position: relative;
+          background: #fffdf9;
+          box-shadow: 0 25px 50px rgba(120, 96, 30, 0.16), 0 3px 8px rgba(0,0,0,0.06);
+          border-radius: 2px;
         }
-        /* Borde fino dorado interior, estilo papelería fina */
+        /* Único marco fino dorado, estilo grabado en relieve */
         .envelope::before {
           content: '';
-          position: absolute; inset: 8px;
-          border: 1px solid rgba(184, 156, 35, 0.35);
+          position: absolute; inset: 10px;
+          border: 1px solid rgba(184, 156, 35, 0.55);
           pointer-events: none;
+          z-index: 2;
         }
-        /* Solapa trasera triangular */
+        /* Solapa trasera triangular (cuerpo del sobre) */
         .envelope::after {
           content: '';
           position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-          background: linear-gradient(165deg, #fdf9ef 0%, #f1e6cd 100%);
-          clip-path: polygon(0 0, 50% 42%, 100% 0, 100% 100%, 0 100%);
-          border-radius: 3px;
+          background: linear-gradient(170deg, #fdfbf6 0%, #f4ecd9 100%);
+          clip-path: polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
           z-index: 1;
         }
-        /* Solapa frontal abatible con relieve */
+        /* Líneas ornamentales finas bajo la solapa, estilo invitación grabada */
+        .envelope-ornament {
+          position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+          width: 130px; height: 1px; background: rgba(184, 156, 35, 0.4); z-index: 2;
+        }
+        .envelope-ornament::before, .envelope-ornament::after {
+          content: '♦'; position: absolute; top: 50%; transform: translateY(-50%);
+          color: rgba(184, 156, 35, 0.55); font-size: 8px;
+        }
+        .envelope-ornament::before { left: -14px; }
+        .envelope-ornament::after { right: -14px; }
+
+        /* Solapa frontal abatible */
         .envelope-flap {
-          position: absolute; top: -1px; left: -1px; width: calc(100% + 2px); height: 60%;
-          background: linear-gradient(160deg, #fffefb 0%, #f3e9d4 100%);
-          clip-path: polygon(0 0, 50% 88%, 100% 0);
+          position: absolute; top: -1px; left: -1px; width: calc(100% + 2px); height: 58%;
+          background: linear-gradient(165deg, #fffefb 0%, #f6eed9 100%);
+          clip-path: polygon(0 0, 50% 86%, 100% 0);
           transform-origin: top center;
           z-index: 3;
-          box-shadow: 0 1px 0 rgba(184,156,35,0.25) inset;
           transition: transform 1s cubic-bezier(0.65, 0, 0.35, 1);
         }
-        .envelope-flap::after {
+        .envelope-flap::before {
           content: '';
           position: absolute; inset: 0;
-          clip-path: polygon(0 0, 50% 88%, 100% 0);
-          border-top: 1px solid rgba(184, 156, 35, 0.3);
+          clip-path: polygon(0 0, 50% 86%, 100% 0);
+          border-top: 1px solid rgba(184, 156, 35, 0.5);
+        }
+        /* Línea fina paralela al pliegue, detalle de papelería fina */
+        .envelope-flap::after {
+          content: '';
+          position: absolute; top: 14px; left: 50%; width: 70%; height: 1px;
+          background: rgba(184, 156, 35, 0.25);
+          transform: translateX(-50%) scaleX(0.78);
         }
         .envelope.opening .envelope-flap {
           transform: rotateX(180deg);
         }
 
+        /* Sello: monograma en serif elegante, no cursiva, para que se lea bien a tamaño pequeño */
         .seal {
-          width: 76px; height: 76px; border-radius: 50%;
-          background: radial-gradient(circle at 35% 30%, #cdab38, #9c7d1c 75%);
+          width: 72px; height: 72px; border-radius: 50%;
+          background: radial-gradient(circle at 35% 30%, #d4b24a, #96791b 78%);
           display: flex; align-items: center; justify-content: center;
-          color: #fdf6e3; font-family: 'Great Vibes', cursive; font-size: 26px;
-          cursor: pointer; position: absolute; left: 50%; top: 52%;
+          cursor: pointer; position: absolute; left: 50%; top: 53%;
           transform: translate(-50%, -50%);
           box-shadow:
-            0 3px 8px rgba(120, 96, 30, 0.45),
-            inset 0 2px 3px rgba(255,255,255,0.35),
-            inset 0 -3px 5px rgba(0,0,0,0.25);
-          border: 1px solid rgba(120,96,30,0.4);
+            0 4px 10px rgba(120, 96, 30, 0.4),
+            inset 0 2px 3px rgba(255,255,255,0.4),
+            inset 0 -3px 6px rgba(0,0,0,0.3);
+          border: 1px solid rgba(120,96,30,0.45);
           transition: transform 0.35s ease, box-shadow 0.35s ease;
           animation: sealPulse 2.6s ease-in-out infinite;
           z-index: 4;
         }
+        .seal-monogram {
+          font-family: Georgia, 'Times New Roman', serif;
+          font-size: 19px; letter-spacing: 0.06em; font-weight: 400;
+          color: #fdf6e3; text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+        }
+        .seal-monogram .amp { font-size: 13px; vertical-align: 1px; margin: 0 1px; opacity: 0.85; }
         .seal:hover { transform: translate(-50%, -50%) scale(1.07); }
         .seal:active { transform: translate(-50%, -50%) scale(0.95); }
         @keyframes sealPulse {
-          0%, 100% { box-shadow: 0 3px 8px rgba(120, 96, 30, 0.45), inset 0 2px 3px rgba(255,255,255,0.35), inset 0 -3px 5px rgba(0,0,0,0.25); }
-          50% { box-shadow: 0 3px 14px rgba(120, 96, 30, 0.7), inset 0 2px 3px rgba(255,255,255,0.4), inset 0 -3px 5px rgba(0,0,0,0.25); }
+          0%, 100% { box-shadow: 0 4px 10px rgba(120, 96, 30, 0.4), inset 0 2px 3px rgba(255,255,255,0.4), inset 0 -3px 6px rgba(0,0,0,0.3); }
+          50% { box-shadow: 0 4px 16px rgba(120, 96, 30, 0.65), inset 0 2px 3px rgba(255,255,255,0.45), inset 0 -3px 6px rgba(0,0,0,0.3); }
         }
 
         .hint-text { animation: hintFade 2s ease-in-out infinite; letter-spacing: 0.08em; }
         @keyframes hintFade {
           0%, 100% { opacity: 0.55; }
           50% { opacity: 1; }
+        }
+
+        /* Pétalos dorados flotando en la pantalla de bienvenida, ambiente de boda */
+        .petal {
+          position: absolute; top: -5%; width: 10px; height: 10px; pointer-events: none;
+          background: radial-gradient(circle at 30% 30%, #e7cd7a, #b89c23 80%);
+          border-radius: 60% 0 60% 0;
+          opacity: 0.7;
+          animation-name: petalFall;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+        }
+        @keyframes petalFall {
+          0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+          10% { opacity: 0.75; }
+          90% { opacity: 0.6; }
+          100% { transform: translateY(110vh) translateX(var(--drift, 40px)) rotate(360deg); opacity: 0; }
         }
 
         /* Portada: entrada escalonada al abrir */
@@ -207,13 +247,17 @@
 
     <!-- Pantalla de inicio -->
     <div id="overlay" class="overlay">
-        <div class="envelope-wrapper">
+        <div id="petalLayer" class="absolute inset-0 overflow-hidden" style="z-index: 1;"></div>
+        <div class="envelope-wrapper" style="position: relative; z-index: 2;">
             <div id="envelopeBox" class="envelope">
+                <div class="envelope-ornament"></div>
                 <div id="envelopeFlap" class="envelope-flap"></div>
-                <div class="seal" onclick="abrirInvitacion()">J&K</div>
+                <div class="seal" onclick="abrirInvitacion()">
+                    <span class="seal-monogram">J<span class="amp">&amp;</span>K</span>
+                </div>
             </div>
         </div>
-        <p class="mt-10 text-[#9c7d1c] font-montserrat font-bold hint-text text-sm">Haz clic en el sello para abrir</p>
+        <p class="mt-10 text-[#9c7d1c] font-montserrat font-bold hint-text text-sm" style="position: relative; z-index: 2;">Haz clic en el sello para abrir</p>
     </div>
 
     <div id="toast" class="toast"></div>
@@ -273,7 +317,7 @@
                     <span class="date-number">10</span><span class="date-divider w-0.5 h-10 border-r-2 border-dotted border-[#B89C23]"></span>
                     <span class="date-number">26</span>
                 </div>
-                <p class="reveal-child delay-4 font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos<br>para celebrar<br>juntos</p>
+                <p class="reveal-child delay-4 font-great-vibes text-3xl text-[#4377A3] mt-6">Te esperamos<br>para celebrar<br><span class="font-montserrat font-bold tracking-widest">JUNTOS</span></p>
             </div>
         </section>
 
@@ -302,17 +346,17 @@
                     <p>2:30 PM</p>
                 </div>
                 <img src="https://raw.githubusercontent.com/regina1503/Mis-xv-a-os-Monserrat-Sarai/main/image-removebg-preview%20(1).png" alt="Salón" class="reveal-child delay-2 salon-img w-64 h-auto mb-6 object-contain">
-                <a href="#" class="reveal-child delay-3 cta-btn px-8 py-4 bg-[#B89C23] text-white font-montserrat rounded-full shadow-lg">Ver ubicación</a>
+                <a href="https://www.google.com/maps/place/Sal%C3%B3n+y+Jard%C3%ADn+Grand+Oasis,+los+juzgados,+Ignacio+L%C3%B3pez+Ray%C3%B3n+Supermanzana+Por,+Independencia,+22710+Playas+de+Rosarito,+B.C./data=!4m2!3m1!1s0x80d931a609705235:0xf20d8bd33e80ad23!18m1!1e1?entry=gps&coh=192189&g_ep=CAESBzI2LjIzLjUYACCenQoqnwEsOTQyNjc3MjcsOTQyOTIxOTUsOTQyOTk1MzIsMTAwNzk2NDk4LDEwMDc5Nzc2MSwxMDA3OTY1MzUsOTQyODA1NzYsMTAwODExOTU5LDk0MjA3Mzk0LDk0MjA3NTA2LDk0MjA4NTA2LDk0MjE4NjUzLDk0MjI5ODM5LDEwMDgwODY1OSw5NDI3NTE2OCw5NDI3OTYxOSwxMDA4MjAyMzJCAk1Y&skid=5e73cc7f-b0c7-4d1e-bd4f-ef97a4af95dd" target="_blank" rel="noopener" class="reveal-child delay-3 cta-btn px-8 py-4 bg-[#B89C23] text-white font-montserrat rounded-full shadow-lg">Ver ubicación</a>
             </div>
         </section>
 
         <!-- 5. Galería -->
         <section class="snap-section w-full flex flex-col justify-center items-center bg-gray-50 p-4 reveal">
-            <h2 class="reveal-child font-great-vibes text-4xl mb-4 text-[#4377A3]">Nuestros momentos</h2>
-            <div class="flex flex-col gap-3 w-full max-w-sm h-[78vh] md:h-[70vh]">
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-full object-cover"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-full object-cover"></div>
-                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-full object-cover"></div>
+            <h2 class="reveal-child font-great-vibes text-4xl mb-4 text-[#4377A3] -mt-[5vh]">Nuestros momentos</h2>
+            <div class="flex flex-col gap-3 w-full max-w-sm h-[76vh] md:h-[68vh]">
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.25%20AM.jpeg" class="w-full h-full object-contain"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://raw.githubusercontent.com/regina1503/nuestra-boda-karen-y-jesus/main/WhatsApp%20Image%202026-06-04%20at%209.00.24%20AM.jpeg" class="w-full h-full object-contain"></div>
+                <div class="gallery-img overflow-hidden rounded-lg shadow-md flex-1 min-h-0 bg-white flex items-center justify-center"><img src="https://github.com/regina1503/nuestra-boda-karen-y-jesus/raw/main/ChatGPT%20Image%2026%20jun%202026%2C%2018_59_16.png" class="w-full h-full object-contain"></div>
             </div>
         </section>
 
@@ -383,6 +427,26 @@
         }
 
         const envelopeBox = document.getElementById('envelopeBox');
+
+        // Generar pétalos dorados con posiciones y velocidades variadas, efecto ambiental de boda
+        const petalLayer = document.getElementById('petalLayer');
+        const PETAL_COUNT = 14;
+        for (let i = 0; i < PETAL_COUNT; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const left = Math.random() * 100;
+            const size = 6 + Math.random() * 7;
+            const duration = 7 + Math.random() * 6;
+            const delay = Math.random() * 8;
+            const drift = (Math.random() * 80 - 40) + 'px';
+            petal.style.left = left + 'vw';
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            petal.style.setProperty('--drift', drift);
+            petal.style.animationDuration = duration + 's';
+            petal.style.animationDelay = delay + 's';
+            petalLayer.appendChild(petal);
+        }
 
         function abrirInvitacion() {
             // Paso 1: abrir la solapa con efecto de relieve
